@@ -1,7 +1,7 @@
 package com.kana_tutor.navigationdemo
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 

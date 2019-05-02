@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Navigation Demo</string>
+    <string name="increment_counter_txt">Increment counter</string>
+    <string name="counter_txt">counter</string>
 </resources>
