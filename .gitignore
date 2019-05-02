@@ -1,0 +1,15 @@
+*.iml
+.gradle
+/.idea
+/build
+app/build
+
+
+.*.sw*
+*.sw*
+*/*.sw*
+*.jar
+t
+err
+tags
+
