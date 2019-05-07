@@ -27,15 +27,22 @@
 package com.kana_tutor.navigationdemo
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
+import android.text.Html
+import android.text.Spanned
 import android.util.Log.e
+import android.util.TypedValue
+import android.view.Gravity
 import android.widget.Button
 import android.widget.TextView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuInflater
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
 
 // this file was created from the <layout> tag in activity_main.xml.
@@ -47,26 +54,40 @@ import java.text.SimpleDateFormat
 class MainActivity : AppCompatActivity() {
     private val logTag = "MainActivity"
 
-    fun displayAboutInfo() : Boolean {
+    private fun htmlString(htmlString:String) : Spanned {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Html.fromHtml(htmlString, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        }
+        else {
+            Html.fromHtml(htmlString)
+        }
+    }
+    private fun displayAboutInfo() : Boolean {
         val appInfo = packageManager
             .getApplicationInfo(BuildConfig.APPLICATION_ID, 0)
         val installTimestamp = File(appInfo.sourceDir).lastModified()
 
-        /*
-        &lt;html&gt;Version(%1$d, %2$s)
-        &lt;br&gt;Build date:   %3$s
-        &lt;br&gt;Install date: %4$s
-        &lt;br&gt;Build info: %5$s:branch = $6%s
-        */
-        val htmlString = String.format(getString(R.string.about_query),
-                BuildConfig.VERSION_CODE, BuildConfig.VERSION_NAME
-                , SimpleDateFormat.getInstance().format(
+        val htmlString = String.format(getString(R.string.about_query)
+            , getString(R.string.app_name)
+            , BuildConfig.VERSION_CODE, BuildConfig.VERSION_NAME
+            , SimpleDateFormat.getInstance().format(
                 java.util.Date(BuildConfig.BUILD_TIMESTAMP))
-                , SimpleDateFormat.getInstance().format(
+            , SimpleDateFormat.getInstance().format(
                 java.util.Date(installTimestamp))
-                , if(BuildConfig.DEBUG) "debug" else "release"
-                , BuildConfig.BRANCH_NAME
-            )
+            , if(BuildConfig.DEBUG) "debug" else "release"
+            , BuildConfig.BRANCH_NAME
+        )
+
+        val aboutTv = TextView(this)
+        aboutTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,20.0f)
+        aboutTv.setTypeface(null, Typeface.BOLD)
+
+        aboutTv.text = htmlString(htmlString)
+        aboutTv.gravity = Gravity.CENTER
+
+        val dialogBuilder = AlertDialog.Builder(this)
+            .setView(aboutTv)
+            .show()
         return true
     }
     // Menu item selected listener.
@@ -74,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.about_item -> displayAboutInfo()
             else ->
-                Log.e(logTag, String.format("Unhandled Menu item id: 0x%08x", item.itemId))
+                e(logTag, String.format("Unhandled Menu item id: 0x%08x", item.itemId))
         }
         return true
     }

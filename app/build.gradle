@@ -16,8 +16,10 @@ def gitBranch() {
 android {
     compileSdkVersion 28
     defaultConfig {
-        // add a timestamp and working branch to buiild config for use in the about.
-        buildConfigField 'long', 'BUILD_TIMESTAMP', String.format("0x%08xL", System.currentTimeMillis())
+        // add a timestamp and working branch to buiild config for use
+        // in the about.
+        buildConfigField 'long', 'BUILD_TIMESTAMP',
+           String.format("0x%08xL", System.currentTimeMillis())
         buildConfigField "String", "BRANCH_NAME", "\"${gitBranch()}\""
         applicationId "com.kana_tutor.navigationdemo"
         minSdkVersion 19
