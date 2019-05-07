@@ -29,6 +29,7 @@ package com.kana_tutor.navigationdemo
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.util.Log.e
 import android.widget.Button
 import android.widget.TextView
 import android.view.Menu
@@ -40,13 +41,41 @@ import androidx.databinding.DataBindingUtil
 // this file was created from the <layout> tag in activity_main.xml.
 // Note that ActivityMainBinding is a mangled version of activity_main.
 import com.kana_tutor.navigationdemo.databinding.ActivityMainBinding
+import java.io.File
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {
     private val logTag = "MainActivity"
 
+    fun displayAboutInfo() : Boolean {
+        val appInfo = packageManager
+            .getApplicationInfo(BuildConfig.APPLICATION_ID, 0)
+        val installTimestamp = File(appInfo.sourceDir).lastModified()
+
+        /*
+        &lt;html&gt;Version(%1$d, %2$s)
+        &lt;br&gt;Build date:   %3$s
+        &lt;br&gt;Install date: %4$s
+        &lt;br&gt;Build info: %5$s:branch = $6%s
+        */
+        val htmlString = String.format(getString(R.string.about_query),
+                BuildConfig.VERSION_CODE, BuildConfig.VERSION_NAME
+                , SimpleDateFormat.getInstance().format(
+                java.util.Date(BuildConfig.BUILD_TIMESTAMP))
+                , SimpleDateFormat.getInstance().format(
+                java.util.Date(installTimestamp))
+                , if(BuildConfig.DEBUG) "debug" else "release"
+                , BuildConfig.BRANCH_NAME
+            )
+        return true
+    }
     // Menu item selected listener.
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(logTag, String.format("Menu item id: 0x%08x", item.itemId))
+        when (item.itemId) {
+            R.id.about_item -> displayAboutInfo()
+            else ->
+                Log.e(logTag, String.format("Unhandled Menu item id: 0x%08x", item.itemId))
+        }
         return true
     }
 

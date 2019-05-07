@@ -2,4 +2,13 @@
     <string name="app_name">Navigation Demo</string>
     <string name="increment_counter_txt">Increment counter</string>
     <string name="counter_txt">counter</string>
+
+    <!-- for about menu item -->
+    <string name="about_query" >
+        &lt;html&gt;Version(%1$d, %2$s)
+        &lt;br&gt;Build date:   %3$s
+        &lt;br&gt;Install date: %4$s
+        &lt;br&gt;Build info: %5$s:branch = %6$s
+    </string>
+
 </resources>

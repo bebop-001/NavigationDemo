@@ -16,4 +16,13 @@ This is what I've done so far:
   
 > After you have completed this step you should see a new package under Android->app->GeneratedJava which will contain a class called ActivityMainBinding.  ActivityMainBinding is a name-mangled version of activity_main and if you examine it you will see static public declarations for each of the view objects in activity_main that are name-mangled versions of their resource ID.  This is the magic of name-mangling: you no longer need to go through the process of finding each view using 'findViewById' and you get compile-time handles for each view object rather than waiting for runtime handles.
 
-3.  Add a button listener to the MainActivity.  Here you will see the use of data-binding in the onCreate method.
+3.  Add a button listener to the MainActivity.  Here you will 
+see the use of data-binding in the onCreate method.
+
+4.  Add an "About" menu item that will display build timestamp, branch, build type, etc.
+
+        * Changed app/build.gradle to add info to BuildConfig.
+        * created res/menu/menu_main.xml.
+        * Added menu inflator and listener callback to MainActivity.
+        * Added an AlertDialog to MainActivity for displaying the menu info.
+        
