@@ -4,9 +4,21 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+// use git to get the current branch.
+def gitBranch() {
+    def branch = ""
+    def proc = "git rev-parse --abbrev-ref HEAD".execute()
+    proc.in.eachLine { line -> branch = line }
+    proc.err.eachLine { line -> println line }
+    proc.waitFor()
+    branch
+}
 android {
     compileSdkVersion 28
     defaultConfig {
+        // add a timestamp and working branch to buiild config for use in the about.
+        buildConfigField 'long', 'BUILD_TIMESTAMP', String.format("0x%08xL", System.currentTimeMillis())
+        buildConfigField "String", "GIT_BRRANCH", "\"${gitBranch()}\""
         applicationId "com.kana_tutor.navigationdemo"
         minSdkVersion 19
         targetSdkVersion 28
@@ -28,5 +40,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
 }

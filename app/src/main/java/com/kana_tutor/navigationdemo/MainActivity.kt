@@ -16,7 +16,7 @@
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  *  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  *  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- *  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ *  NON-INFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
  *  HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
  *  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  *  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
@@ -28,8 +28,12 @@ package com.kana_tutor.navigationdemo
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MenuInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 
@@ -38,6 +42,22 @@ import androidx.databinding.DataBindingUtil
 import com.kana_tutor.navigationdemo.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private val logTag = "MainActivity"
+
+    // Menu item selected listener.
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d(logTag, String.format("Menu item id: 0x%08x", item.itemId))
+        return true
+    }
+
+    // Over-ride the default onCreateOptionsMenu  callback
+    // to inflate our app bar overflow menu.
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
     // this is the kotlin equivalent of a static variable.
     // It's here so when MainActivity is re-created during an
     // orientation change, the counter isn't re-initialized.
