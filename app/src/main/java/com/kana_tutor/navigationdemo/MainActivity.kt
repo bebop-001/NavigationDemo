@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
         aboutTv.text = htmlString(htmlString)
         aboutTv.gravity = Gravity.CENTER
 
-        val dialogBuilder = AlertDialog.Builder(this)
+        AlertDialog.Builder(this)
             .setView(aboutTv)
             .show()
         return true
