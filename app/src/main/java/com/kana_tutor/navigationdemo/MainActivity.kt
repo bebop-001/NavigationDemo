@@ -32,7 +32,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
-import android.util.Log.e
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.Button
@@ -54,14 +54,18 @@ import java.text.SimpleDateFormat
 class MainActivity : AppCompatActivity() {
     private val logTag = "MainActivity"
 
+    // Return a spanned html string using the appropriate call for
+    // the user's device.
     private fun htmlString(htmlString:String) : Spanned {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Html.fromHtml(htmlString, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
         else {
+            @Suppress("DEPRECATION")
             Html.fromHtml(htmlString)
         }
     }
+    // Display info about the build using an AlertDialog.
     private fun displayAboutInfo() : Boolean {
         val appInfo = packageManager
             .getApplicationInfo(BuildConfig.APPLICATION_ID, 0)
@@ -79,11 +83,12 @@ class MainActivity : AppCompatActivity() {
         )
 
         val aboutTv = TextView(this)
-        aboutTv.setTextSize(TypedValue.COMPLEX_UNIT_SP,20.0f)
-        aboutTv.setTypeface(null, Typeface.BOLD)
-
-        aboutTv.text = htmlString(htmlString)
-        aboutTv.gravity = Gravity.CENTER
+        aboutTv.apply {
+            setTextSize(TypedValue.COMPLEX_UNIT_SP, 20.0f)
+            setTypeface(null, Typeface.BOLD)
+            text = htmlString(htmlString)
+            gravity = Gravity.CENTER
+        }
 
         AlertDialog.Builder(this)
             .setView(aboutTv)
@@ -95,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.about_item -> displayAboutInfo()
             else ->
-                e(logTag, String.format("Unhandled Menu item id: 0x%08x", item.itemId))
+                Log.e(logTag, String.format("Unhandled Menu item id: 0x%08x", item.itemId))
         }
         return true
     }
@@ -111,8 +116,8 @@ class MainActivity : AppCompatActivity() {
     // this is the kotlin equivalent of a static variable.
     // It's here so when MainActivity is re-created during an
     // orientation change, the counter isn't re-initialized.
-    companion object {
-        private var counter = 0
+    private companion object {
+        var counter:Int = 0
     }
 
     // Set the text value with the button text and the counter value.
