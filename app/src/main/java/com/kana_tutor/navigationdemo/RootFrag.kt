@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.kana_tutor.navigationdemo.databinding.RootFragBinding
 
 /**
@@ -24,6 +26,18 @@ class RootFrag : Fragment() {
                 inflater, R.layout.root_frag
                 , container, false
             )
+        binding.apply {
+            toUpperBtn.setOnClickListener { view: View ->
+                view.findNavController().navigate(
+                    R.id.action_rootFrag_to_upperFrag
+                )
+            }
+            toLowerBtn.setOnClickListener { view:View ->
+                view.findNavController().navigate(
+                    R.id.action_rootFrag_to_lowerFrag
+                )
+            }
+        }
         return binding.root
     }
 }

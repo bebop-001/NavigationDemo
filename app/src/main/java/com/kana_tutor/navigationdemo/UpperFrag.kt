@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import com.kana_tutor.navigationdemo.databinding.UpperFragBinding
 
 /**
@@ -23,6 +24,11 @@ class UpperFrag : Fragment() {
                 inflater, R.layout.upper_frag
                 , container, false
             )
+        binding.toTopFromUpperBtn.setOnClickListener { view : View ->
+            view.findNavController().navigate(
+                R.id.action_upperFrag_to_topFrag
+            )
+        }
         return binding.root
     }
 }
