@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/navigation"
-            app:startDestination="@id/rootFragment">
+            app:startDestination="@id/rootFrag">
 
-    <fragment android:id="@+id/rootFragment"
+    <fragment android:id="@+id/lowerFrag"
+              android:name="com.kana_tutor.navigationdemo.LowerFrag"
+              android:label="lower_frag"
+              tools:layout="@layout/lower_frag">
+        <action android:id="@+id/action_lowerFrag_to_topFrag"
+                app:destination="@id/topFrag"/>
+    </fragment>
+    <fragment android:id="@+id/rootFrag"
               android:name="com.kana_tutor.navigationdemo.RootFrag"
-              android:label="RootFragment"/>
+              android:label="root_frag"
+              tools:layout="@layout/root_frag">
+        <action android:id="@+id/action_rootFrag_to_lowerFrag"
+                app:destination="@id/lowerFrag"/>
+        <action android:id="@+id/action_rootFrag_to_upperFrag"
+                app:destination="@id/upperFrag"/>
+    </fragment>
+    <fragment android:id="@+id/topFrag"
+              android:name="com.kana_tutor.navigationdemo.TopFrag"
+              android:label="top_frag"
+              tools:layout="@layout/top_frag">
+        <action android:id="@+id/action_topFrag_to_rootFrag"
+                app:destination="@id/rootFrag"/>
+    </fragment>
+    <fragment android:id="@+id/upperFrag"
+              android:name="com.kana_tutor.navigationdemo.UpperFrag"
+              android:label="upper_frag"
+              tools:layout="@layout/upper_frag">
+        <action android:id="@+id/action_upperFrag_to_topFrag"
+                app:destination="@id/topFrag"/>
+    </fragment>
 </navigation>
