@@ -25,8 +25,41 @@ see the use of data-binding in the onCreate method.
     * created res/menu/menu_main.xml.
     * Added menu inflator and listener callback to MainActivity.
     * Added an AlertDialog to MainActivity for displaying the menu info.
+    * Create an app/src/main/res/navigation directory and add to it a navigation.xml resource file.  The NavigationEditor (later) will save it's actions here.
 
 5.  Create fragments for navigation.
 
-    * Create an empty fragment called RootFragment.  Uncheck all options.  We want a blank fragment class.  Open the text file and replace the text view with binding and inflate code.  **Note:** this won't compile untill we have created the fragment layout (next).
+    * Add implementation dependencies for navigation-fragment-ktx and navigation-ui-ktx to the app/build.gradle.
+    * Add fragments for navigation demo.  For each of these, create both a ...Frag.kt fragment class and ...frag_.xtml layout file.  Each will have one or two buttons to demonstrate data-binding for callbacks and navigation.  You have to add the <layout> wrapper to each of the xml files to enable data-binding.
+
+        * RootFrag.kt and root_frag.xml has two buttons with id's: to_upper_frag_btn and to_lower_frag_btn
+        * UpperFrag.kt and upper_frag.xml which has one button with an id of to_top_from_upper_button.
+        * LowerFrag.kt and lower_frag.xml which has one button: to_top_from_lower_btn
+        * TopFrag and top_frag.xml which has one button: to_root_btn.
+
+    * Compile the code.  This will fail for the *Fragment.kt files but will generate the *FragBinding.java files for data-binding.
+    * Edit each of the Frag.kt files.  Your goal is to get the onCreateView method working and hook up the basic data-binding code.  We aren't worried about the button event handlers yet.  When everything compiled I checked in the code.
+    * Open the res/navigation/navigation.xml layout.  In design mode this will bring up a graphic Navigation Editor that is used to define the action relationships for each fragment.
+.
+        * In the upper-left of the Navigation Editor there is a small icon that looks like a phone.  Use this to add each of your 4 fragments.
+        * Drag them to appropriate locations.
+        * use the graphic editor to "connect the dots".  **Note** that the **"Pop Behavior"** has a checkbox that says "Inclusive.  **Inclusive means "pop until you find the fragment and pop that too."  Non-inclusive means "pop until you find the fragment, then stop."**  Define these action relationships:
+
+            * root -> upper frag
+            * root -> lower frag
+            * upper frag -> top frag
+            * lower frag -> top frag
+            * top frag -> root frag
+ ![NavEditor Image](snapshots/NavEditor)
+
+        * This is how the Navigation Editor looked to me at this point.
+
+6.  Next we will add onClick listeners to each of the fragments using the NavGraph created by the navigation editor.  If you look at res/navigation/navigaton.xml we created, you will find it now contains a <Fragment> for each of the four fragments we added.  Each <Fragment> contains an action or actions that were defined by the connections were made.  Syntax for the resource id for the action is "action_<Fragment>_to_<destination Fragment>.  For instance the action from the rootFrag to the upperFrag is "action_rootFrag_to_upperFrag".  
+
+> We have two ways we can use setOnClickListener.  As far as I can tell, it doesn't make much difference which is used.  The thing to note is that both use the navigate method which is of note because this method deals with adding/removing from the  back stack which means that we can use the back arrow without any further coding.
+
+        * assign a lambda:
+          view -> view.findNavController().navigate(action resource id)
+        * use the Navigate class to create our onClick:
+          Navigation.createNavigateOnClickListener(action_resource_id, null)
 
