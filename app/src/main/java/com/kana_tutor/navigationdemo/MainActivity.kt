@@ -131,7 +131,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         // the data-binding "magic" happens here.  DataBindingUtil.java
         // defines the various methods for data binding.
         val binding : ActivityMainBinding

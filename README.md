@@ -14,15 +14,19 @@ This is what I've done so far:
 1. Create an initial kotlin android application with an empty activity.  By default this will give you a MainActivity.kt and an activity_main.xml layout.  I removed the android test directories.  This app isn't going to do enough to make their use worth while.
 2. Make the basic changes to gradle, MainActivity and activity_main.xml for the basic activity to compile.  This includes adding the <layout> tag to the layout file.  It also involded replacing the constraint-layout (which doesn't support data-binding) with a simple LinearLayout.
   
-> After you have completed this step you should see a new package under Android->app->GeneratedJava which will contain a class called ActivityMainBinding.  ActivityMainBinding is a name-mangled version of activity_main and if you examine it you will see static public declarations for each of the view objects in activity_main that are name-mangled versions of their resource ID.  This is the magic of name-mangling: you no longer need to go through the process of finding each view using 'findViewById' and you get compile-time handles for each view object rather than waiting for runtime handles.
+    After you have completed this step you should see a new package under Android->app->GeneratedJava which will contain a class called ActivityMainBinding.  ActivityMainBinding is a name-mangled version of activity_main and if you examine it you will see static public declarations for each of the view objects in activity_main that are name-mangled versions of their resource ID.  This is the magic of name-mangling: you no longer need to go through the process of finding each view using 'findViewById' and you get compile-time handles for each view object rather than waiting for runtime handles.
 
 3.  Add a button listener to the MainActivity.  Here you will 
 see the use of data-binding in the onCreate method.
 
 4.  Add an "About" menu item that will display build timestamp, branch, build type, etc.
 
-        * Changed app/build.gradle to add info to BuildConfig.
-        * created res/menu/menu_main.xml.
-        * Added menu inflator and listener callback to MainActivity.
-        * Added an AlertDialog to MainActivity for displaying the menu info.
-        
+    * Changed app/build.gradle to add info to BuildConfig.
+    * created res/menu/menu_main.xml.
+    * Added menu inflator and listener callback to MainActivity.
+    * Added an AlertDialog to MainActivity for displaying the menu info.
+
+5.  Create fragments for navigation.
+
+    * Create an empty fragment called RootFragment.  Uncheck all options.  We want a blank fragment class.  Open the text file and replace the text view with binding and inflate code.  **Note:** this won't compile untill we have created the fragment layout (next).
+

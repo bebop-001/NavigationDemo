@@ -26,6 +26,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
 >
     <LinearLayout
@@ -47,5 +48,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAllCaps="false"/>
+        <!-- The NavHostFragment within the activity_main layout -->
+        <!--fragment
+            android:id="@+id/navHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navGraph="@navigation/navigation"
+            app:defaultNavHost="true"
+        /-->
+        <!-- before navigation stuff is working...  need path to
+             RootFrag for inflation. -->
+        <!--fragment
+            android:id="@+id/navHostFragment"
+            android:name="com.kana_tutor.navigationdemo.RootFrag
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+        /-->
+        <fragment
+            android:id="@+id/myNavHostFragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/navigation"
+        />
     </LinearLayout>
 </layout>

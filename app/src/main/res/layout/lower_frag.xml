@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.kana_tutor.navigationdemo.LowerFrag"
+    >
+    <RelativeLayout
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#3F51B5">
+        <Button
+            android:text="@string/to_top"
+            android:id="@+id/to_top_from_lower_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:background="#9C27B0"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+</layout>

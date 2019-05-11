@@ -13,4 +13,10 @@
         &lt;/html&gt;
     </string>
 
+    <!-- frag navigation buttons. -->
+    <string name="to_upper">To Upper</string>
+    <string name="to_lower">To Lower</string>
+    <string name="to_top">To Top</string>
+    <string name="to_root">To Root</string>
+
 </resources>
