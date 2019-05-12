@@ -32,7 +32,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.text.Spanned
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.widget.Button
@@ -40,10 +39,13 @@ import android.widget.TextView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.MenuInflater
+
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 
 // this file was created from the <layout> tag in activity_main.xml.
 // Note that ActivityMainBinding is a mangled version of activity_main.
@@ -52,6 +54,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {
+    @SuppressLint("UNUSED")
     private val logTag = "MainActivity"
 
     // Return a spanned html string using the appropriate call for
@@ -97,12 +100,14 @@ class MainActivity : AppCompatActivity() {
     }
     // Menu item selected listener.
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var rv = true
         when (item.itemId) {
             R.id.about_item -> displayAboutInfo()
-            else ->
-                Log.e(logTag, String.format("Unhandled Menu item id: 0x%08x", item.itemId))
-        }
-        return true
+            // If item isn't for this menu, you must call the super or
+            // other things that must happen (eg: up-button in onSupportNavigateUp)
+            // won't happen.
+            else -> rv = super.onOptionsItemSelected(item);        }
+        return rv
     }
 
     // Over-ride the default onCreateOptionsMenu  callback
@@ -146,5 +151,14 @@ class MainActivity : AppCompatActivity() {
                     setText(buttonBtn1, textviewTv1)
             }
         }
+        // enable the action-bar back arrow.
+        NavigationUI.setupActionBarWithNavController(
+            this,
+            this.findNavController(R.id.main_nav_host_frag)
+        )
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = this.findNavController(R.id.main_nav_host_frag)
+        return navController.navigateUp()
     }
 }

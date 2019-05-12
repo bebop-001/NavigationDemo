@@ -52,7 +52,7 @@ see the use of data-binding in the onCreate method.
             * top frag -> root frag
  ![NavEditor Image](snapshots/NavEditor)
 
-        * This is how the Navigation Editor looked to me at this point.
+        * This is how the Navigation Editor looked to me at this point.  **Yours may look different.**  The layout for the editor is in .idea/navEditor.xml which is not under git control.
 
 6.  Next we will add onClick listeners to each of the fragments using the NavGraph created by the navigation editor.  If you look at res/navigation/navigaton.xml we created, you will find it now contains a <Fragment> for each of the four fragments we added.  Each <Fragment> contains an action or actions that were defined by the connections were made.  Syntax for the resource id for the action is "action_<Fragment>_to_<destination Fragment>.  For instance the action from the rootFrag to the upperFrag is "action_rootFrag_to_upperFrag".  
 
@@ -63,3 +63,4 @@ see the use of data-binding in the onCreate method.
         * use the Navigate class to create our onClick:
           Navigation.createNavigateOnClickListener(action_resource_id, null)
 
+7. Enable the "up" button in the action bar.  In theory, this is simple:  all you have to do is over ride the onSupportNavigateUp method.  **HOWEVER**  -- there is a possible got-ya here.  We added a menu item above.  When you implement the "up" button "->" is pressed, for some reason the onOptionsItemSelected method is called.  If you implemented this to return true, the onSupportNavigationUp method will never be called.  **You must implement the onOptionsItemSelected method to return false if it doesn't recognize the menu item passed in or onSupportNavigationUp will never be called and the up button will not work!**
