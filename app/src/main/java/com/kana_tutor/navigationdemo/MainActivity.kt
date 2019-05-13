@@ -44,6 +44,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 
@@ -149,6 +150,8 @@ class MainActivity : AppCompatActivity() {
             buttonBtn1.setOnClickListener {
                     counter++
                     setText(buttonBtn1, textviewTv1)
+                val nc = this@MainActivity.findNavController(R.id.main_nav_host_frag)
+                nc.navigate(R.id.counterInfoFrag)
             }
         }
         // enable the action-bar back arrow.
