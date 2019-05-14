@@ -44,7 +44,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 
@@ -75,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             .getApplicationInfo(BuildConfig.APPLICATION_ID, 0)
         val installTimestamp = File(appInfo.sourceDir).lastModified()
 
+        // use html to format our output 'about' message.
         val htmlString = String.format(getString(R.string.about_query)
             , getString(R.string.app_name)
             , BuildConfig.VERSION_CODE, BuildConfig.VERSION_NAME
@@ -86,6 +86,8 @@ class MainActivity : AppCompatActivity() {
             , BuildConfig.BRANCH_NAME
         )
 
+        // use a text-view in the alert so we can display an html
+        // formatted string.
         val aboutTv = TextView(this)
         aboutTv.apply {
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 20.0f)
@@ -145,13 +147,20 @@ class MainActivity : AppCompatActivity() {
             // init the text view.
             // Note that buttonBtn1, textviewTv1 are mangled versions of
             // button_btn_1 and textview_tv_1 used in activity_main.xml.
-            setText(buttonBtn1, textviewTv1)
+            setText(counterIncrementBtn, counterValueTv)
             // define our button callback.
-            buttonBtn1.setOnClickListener {
+            counterIncrementBtn.setOnClickListener {
                     counter++
-                    setText(buttonBtn1, textviewTv1)
-                val nc = this@MainActivity.findNavController(R.id.main_nav_host_frag)
-                nc.navigate(R.id.counterInfoFrag)
+                    setText(counterIncrementBtn, counterValueTv)
+                val bundle = CounterInfoFragArgs.Builder()
+                    .setCounter(counter)
+                    .setChangeTimestamp(System.currentTimeMillis())
+                    .build()
+                    .toBundle()
+
+                val navController
+                    = this@MainActivity.findNavController(R.id.main_nav_host_frag)
+                navController.navigate(R.id.counterInfoFrag, bundle)
             }
         }
         // enable the action-bar back arrow.
@@ -160,8 +169,20 @@ class MainActivity : AppCompatActivity() {
             this.findNavController(R.id.main_nav_host_frag)
         )
     }
+    // listener for the action-bar back arrow.
     override fun onSupportNavigateUp(): Boolean {
-        val navController = this.findNavController(R.id.main_nav_host_frag)
+        val navController
+            = this.findNavController(R.id.main_nav_host_frag)
+        // if this is a back on the counter info frag, just peel everything back
+        // until it is something else.
+        var label  = navController.currentDestination?.label
+        if (label != null && label == "CounterInfoFrag") {
+            while (label != null && label == "CounterInfoFrag") {
+                navController.popBackStack()
+                label = navController.currentDestination?.label
+            }
+            return true;
+        }
         return navController.navigateUp()
     }
 }
