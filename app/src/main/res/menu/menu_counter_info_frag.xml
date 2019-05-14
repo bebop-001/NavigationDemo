@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/i_am_counter_frag_item"
+        android:title="@string/i_am_counter_info"
+        android:visible="true"
+    />
+    <item
+        android:id="@+id/share_menu_item"
+        android:title="@string/share_str"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_share"
+    />
+</menu>

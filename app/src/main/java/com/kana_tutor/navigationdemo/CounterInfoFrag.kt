@@ -31,6 +31,7 @@ import java.util.*
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -46,7 +47,29 @@ import com.kana_tutor.navigationdemo.databinding.CounterInfoFragBinding
  * Possibly of interest is that I used a scroll view instead of a scrolling
  * text view because the scrolled text view doesn't seem to work in a fragment.
  */
-class CounterInfoFrag : Fragment() {
+class CounterInfoFrag : Fragment() {    // Menu item selected listener.
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        var rv = true
+        when (item.itemId) {
+            R.id.i_am_counter_frag_item ->
+                Toast.makeText(this.context, item.title, Toast.LENGTH_LONG).show()
+            R.id.share_menu_item ->
+                Toast.makeText(this.context, item.title, Toast.LENGTH_LONG).show()
+            // If item isn't for this menu, you must call the super or
+            // other things that must happen (eg: up-button ins
+            // onSupportNavigateUp) won't happen.
+            else -> rv = super.onOptionsItemSelected(item)
+        }
+        return rv
+    }
+
+    // Over-ride the default onCreateOptionsMenu  callback
+    // to inflate our app bar overflow menu.
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_counter_info_frag, menu)
+    }
+
+
     // Keep the text here so it will survive re-instantiation of the fragment.
     private companion object {
         var text = ""
@@ -81,6 +104,7 @@ class CounterInfoFrag : Fragment() {
             text = String.format("%2d)\t\t%s\n", counter, timeStamp) + text
         }
         binding.counterInfoTv.text = text
+        setHasOptionsMenu(true)
         return binding.root
     }
 }

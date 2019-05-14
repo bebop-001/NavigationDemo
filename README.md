@@ -50,7 +50,8 @@ see the use of data-binding in the onCreate method.
             * upper frag -> top frag
             * lower frag -> top frag
             * top frag -> root frag
- ![NavEditor Image](snapshots/NavEditor.png)
+            
+        ![NavEditor Image](snapshots/NavEditor.png)
 
         * This is how the Navigation Editor looked to me at this point.  **Yours may look different.**  The layout for the editor is in .idea/navEditor.xml which is not under git control.
 
@@ -58,24 +59,84 @@ see the use of data-binding in the onCreate method.
 
      We have two ways we can use setOnClickListener.  As far as I can tell, it doesn't make much difference which is used.  The thing to note is that both use the navigate method which is of note because this method deals with adding/removing from the  back stack which means that we can use the back arrow without any further coding.
 
-        * assign a lambda:
-          view -> view.findNavController().navigate(action resource id)
-        * use the Navigate class to create our onClick:
-          Navigation.createNavigateOnClickListener(action_resource_id, null)
+    * assign a lambda:  
+      *view -> view.findNavController().navigate(action resource id)*
+    * use the Navigate class to create our onClick:  
+      *Navigation.createNavigateOnClickListener(action_resource_id, null)*
 
-7. Enable the "up" button in the action bar.  In theory, this is simple:  all you have to do is over ride the onSupportNavigateUp method.  **HOWEVER**  -- there is a possible got-ya here.  We added a menu item above.  When you implement the "up" button "->" is pressed, for some reason the onOptionsItemSelected method is called.  If you implemented this to return true, the onSupportNavigationUp method will never be called.  **You must implement the <u>onOptionsItemSelected</u> method to return false if it doesn't recognize the menu item passed in or onSupportNavigationUp will never be called and the up button will not work!**
+7. Enable the "up" button in the action bar.  In theory, this is simple:  all you have to do
+   is over ride the onSupportNavigateUp method.  **HOWEVER**  -- there is a possible got-ya here.
+   We added a menu item above.  When you implement the "up" button "->" is pressed, for some reason
+   the onOptionsItemSelected method is called.  If you implemented this to return true, the
+   onSupportNavigationUp method will never be called.  **You must implement the 
+   <u>onOptionsItemSelected</u> method to return false if it doesn't recognize
+   the menu item passed in or onSupportNavigationUp will never be called and
+   the up button will not work!**
 
-8. Extend menu to fragments:  This turned out to be easier than expected.  I created a res/menu/menu_&lt;frag name&gt;.xml for each fragment and over rode onCreateOptionsMenu and onOptionsItemSelected in each fragment class as well as adding setHasOptionsMenu(true) to each Fragment class' onCreateView.  There was already an onCreateOptionMenu and onOptionsItemSelected method in the MainActivity class.  Then each class checked the item id passed into the onOptionsItemSelected and if the item wasn't for the class, it called it's super class.  As I had hoped, the activity and fragments each received their items.
+8. Extend menu to fragments:  This turned out to be easier than expected.
+   I created a res/menu/menu_&lt;frag name&gt;.xml for each fragment and
+   over rode onCreateOptionsMenu and onOptionsItemSelected in each fragment
+   class as well as adding setHasOptionsMenu(true) to each Fragment class'
+   onCreateView.  There was already an onCreateOptionMenu and
+   onOptionsItemSelected method in the MainActivity class.  Then each
+   class checked the item id passed into the onOptionsItemSelected and 
+   the item wasn't for the class, it called it's super class.  As I had hoped,
+   the activity and fragments each received their items.
 
-9. **Safe-args**: I added a fragment to display the counter info to demonstrate use of safe-args.
+9. **Safe-args**: I added a fragment to display the counter info to demonstrate
+   use of safe-args.
 
-        * Make changes to build.gradle and app/build.gradle to pull in changes necessary for safe-args.
-        * add counter_info_frag.xml using new->layout resource file.  This will be a text-view inside a scrolled view because scrolled text-view doesn't seem to work in Fragments.  Wrap the scroll view in a <layout> tag so we can use data-binding.  The resource id for the scroll view is counter_info_layout and for the text view is counter_info_tv.
-        * add CounterInfoFrag.kt as a new Fragment.  You don't want any options checked when you create this class file.
-        * add counter_info_frag to the Navigation Editor.  Select it and show two arguments: a long called called counterChangeTimestamp and an integer called counter.  Both will have initial values of zero.  Rebuild will result in several new generated files ChangeInfoFrag*.java that contain your data-binding info and also the interface code for safe args.  ChangeInfoFrag is a name-mangled version of change_info_frag.xml.
-            * CounterInfoFragBinding contains the data-binding interface.
-            * CounterInfoFragArgs is used by the fragment creator to build a bundle for the fragment and used by the fragment to extract the user arguments from the bundle.
-            * CounterInfoFragDirections has the action directions used for navigating to another fragment on the navigation graph.  It can also be used for creating the bundle for the destinatino fragment.
-        * Modify the MainActivity button listener to invoke the CounterInfoFrag.  I ended up creating a bundle and passing it because I'm just invoking the fragment from the activity instead of from another fragment.  You will notice also in the 'up button' callback I'm poping the CounterInfoFrag if it's next.  I wanted the counter button to work if the info frag was visible but if the back button is used from the counter info frag, it should not go back to itself.  Since this is not a 'directed' fragment (i.e. one frag to another) I had to do this in the callback.
-        * Modify ChangeInfoFrag.kt to display the info.
+    * Make changes to build.gradle and app/build.gradle to pull in changes
+      necessary for safe-args.
+    * add counter_info_frag.xml using new->layout resource file.  This will
+      be a text-view inside a scrolled view because scrolled text-view doesn't
+      seem to work in Fragments.  Wrap the scroll view in a <layout> tag so we
+      can use data-binding.  The resource id for the scroll view is counter_info
+      layout and for the text view is counter_info_tv.
+    * add CounterInfoFrag.kt as a new Fragment.  You don't want any options checked when
+      you create this class file.
+    * add counter_info_frag to the Navigation Editor.  Select it and show two arguments:
+      a long called called counterChangeTimestamp and an integer called counter.
+      Both will have initial values of zero.  Rebuild will result in several new
+      generated files ChangeInfoFrag*.java that contain your data-binding info and also
+      the interface code for safe args.  ChangeInfoFrag is a name-mangled version of
+      change_info_frag.xml.
+        * CounterInfoFragBinding contains the data-binding interface.
+        * CounterInfoFragArgs is used by the fragment creator to build a bundle for
+          the fragment and used by the fragment to extract the user arguments from
+          the bundle.
+        * CounterInfoFragDirections has the action directions used for navigating
+          to another fragment on the navigation graph.  It can also be used for
+          creating the bundle for the destinatino fragment.
+    * Modify the MainActivity button listener to invoke the CounterInfoFrag.  
+        I ended up creating a bundle and passing it because I'm just invoking the 
+        fragment from the activity instead of from another fragment.  You will
+        notice also in the 'up button' callback I'm poping the CounterInfoFrag
+        if it's next.  I wanted the counter button to work if the info frag was
+        visible but if the back button is used from the counter info frag, it
+        should not go back to itself.  Since this is not a 'directed' fragment
+        (i.e. one frag to another) I had to do this in the callback.
+    * Modify ChangeInfoFrag.kt to display the info.
         
+10. Adding "Share"ability to the counter info page to demonstrate use of intents.
+
+    * First add a new item to menu_counter_info_frag.xml:
+    
+        &lt;item  
+            android:id="@+id/share_menu_item"  
+            android:title="@string/share_str"  
+            app:showAsAction="ifRoom"  
+            android:icon="@android:drawable/ic_menu_share"  
+        /&gt;  
+        
+    * There is already an an onOptionsItemSelected method with a switch 
+    statement in CounterInfoFrag.  To this add another entry:  
+    *R.id.share_menu_item -&gt; Toast.makeText(this.context, item.title,
+        Toast.LENGTH_LONG).show()*
+    * Build your code and run your code.  After you click on the 
+      increment counter now, you should see a share icon on the tool bar.
+      Click on the icon and you should see a toast message that says share.
+      Assuming this works, you are ready to add the intent code.
+    
+    
+    
