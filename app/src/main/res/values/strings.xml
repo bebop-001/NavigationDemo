@@ -22,5 +22,6 @@
     <string name="i_am_top">I AM TOP FRAG</string>
     <string name="i_am_upper">I AM UPPER FRAG</string>
     <string name="i_am_lower">I AM LOWER FRAG</string>
+    <string name="about">About...</string>
 
 </resources>

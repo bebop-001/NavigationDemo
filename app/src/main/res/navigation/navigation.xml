@@ -39,6 +39,16 @@
               android:name="com.kana_tutor.navigationdemo.CounterInfoFrag"
               android:label="CounterInfoFrag"
               tools:layout="@layout/counter_info_frag"
-    />
+    >
+        <argument android:name="changeTimestamp"
+                  app:argType="long"
+                  android:defaultValue="0L"/>
+        <argument android:name="counter"
+                  app:argType="integer"
+                  android:defaultValue="0"/>
+        <action android:id="@+id/action_counterInfoFrag_self"
+                app:destination="@id/counterInfoFrag"
+                app:popUpTo="@+id/rootFrag"/>
+    </fragment>
 
 </navigation>
