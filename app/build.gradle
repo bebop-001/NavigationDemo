@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'androidx.navigation.safeargs'
+
 // use git to get the current branch.
 static def gitBranch() {
     def branch = ""
@@ -47,6 +49,6 @@ dependencies {
     implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
