@@ -26,6 +26,7 @@
 
 package com.kana_tutor.navigationdemo
 
+import android.content.Intent
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,13 +49,38 @@ import com.kana_tutor.navigationdemo.databinding.CounterInfoFragBinding
  * text view because the scrolled text view doesn't seem to work in a fragment.
  */
 class CounterInfoFrag : Fragment() {    // Menu item selected listener.
+    // Keep the text here so it will survive re-instantiation of the fragment.
+    private companion object {
+        var counterInfoHistory = ""
+    }
+
+    // Creating a shared intent to open installed applications with
+    private fun getShareIntent( text : String) : Intent ?{
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.setType("text/plain")
+            .putExtra(Intent.EXTRA_TEXT, text)
+        val destinationExist =
+            intent.resolveActivity(this.activity!!.packageManager) != null
+        return if(destinationExist) intent else null
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var rv = true
         when (item.itemId) {
             R.id.i_am_counter_frag_item ->
                 Toast.makeText(this.context, item.title, Toast.LENGTH_LONG).show()
-            R.id.share_menu_item ->
-                Toast.makeText(this.context, item.title, Toast.LENGTH_LONG).show()
+            R.id.share_menu_item -> {
+                // we shouldn't be able to get here because we checked
+                // when inflating the menu that a destination exists.
+                // however -- to be safe, check for null.
+                val intent  = getShareIntent(counterInfoHistory)
+                if (intent != null)
+                    startActivity(intent)
+                else
+                    Toast.makeText(
+                        this.context, "Share FAILED", Toast.LENGTH_LONG
+                    ).show()
+            }
             // If item isn't for this menu, you must call the super or
             // other things that must happen (eg: up-button ins
             // onSupportNavigateUp) won't happen.
@@ -67,12 +93,11 @@ class CounterInfoFrag : Fragment() {    // Menu item selected listener.
     // to inflate our app bar overflow menu.
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_counter_info_frag, menu)
-    }
-
-
-    // Keep the text here so it will survive re-instantiation of the fragment.
-    private companion object {
-        var text = ""
+        // check to see if a destination exists for our intent
+        // (i.e. getShareIntent does not return a null if dest exists)
+        // and enable/disable the menu item accordingly.
+        val shareItem = menu.findItem(R.id.share_menu_item)
+        shareItem.isEnabled = getShareIntent("") != null
     }
 
     override fun onCreateView(
@@ -101,9 +126,10 @@ class CounterInfoFrag : Fragment() {    // Menu item selected listener.
             )
             .format(changeTimestamp)
             // prepend the new info to the existing info.
-            text = String.format("%2d)\t\t%s\n", counter, timeStamp) + text
+            counterInfoHistory =
+                "${String.format("%2d)\t\t%s\n", counter, timeStamp)}$counterInfoHistory"
         }
-        binding.counterInfoTv.text = text
+        binding.counterInfoTv.text = counterInfoHistory
         setHasOptionsMenu(true)
         return binding.root
     }

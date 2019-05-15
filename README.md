@@ -116,27 +116,66 @@ see the use of data-binding in the onCreate method.
         visible but if the back button is used from the counter info frag, it
         should not go back to itself.  Since this is not a 'directed' fragment
         (i.e. one frag to another) I had to do this in the callback.
-    * Modify ChangeInfoFrag.kt to display the info.
+    * Modify ChangeInfoFrag.kt to display the info.ca000e0caf7005b0ed4deefb03f02c74e2799275
         
 10. Adding "Share"ability to the counter info page to demonstrate use of intents.
 
-    * First add a new item to menu_counter_info_frag.xml:
+    * You will need to add a new menu resource file for the CounterInfoFrag fragment
+      file.  I copied one of the other menu/menu*_frag.xml files, changed the title
+      to i_am_counter_info_frag_item and changed the title to "I AM COUNTER INFO".
+    * You will need to add the menu inflater and the event listener.  I copied the
+      code for onCreateOptionsMenu (the inflator) and onOptionsItemSelected (the 
+      event listener) from one of the other *Frag.kt files.  Change the switch
+      statement in the event listener to R.menu.i_am_counter_info_frag_item to
+      correspond to the changes in the menu.xml file. Your code should now 
+      compile and run and you can select the COUNTER INFO menu item and
+      see a toast message.
+    * Now add a new item to menu_counter_info_frag.xml:
     
         &lt;item  
             android:id="@+id/share_menu_item"  
             android:title="@string/share_str"  
             app:showAsAction="ifRoom"  
-            android:icon="@android:drawable/ic_menu_share"  
+            android:icon="?attr/actionModeShareDrawable"  
         /&gt;  
-        
-    * There is already an an onOptionsItemSelected method with a switch 
-    statement in CounterInfoFrag.  To this add another entry:  
-    *R.id.share_menu_item -&gt; Toast.makeText(this.context, item.title,
-        Toast.LENGTH_LONG).show()*
+    
+    By coincidence, I happened to select the shared icon from the theme using the
+    design editor (hence ?attr/).  The interesting thing about this icon and the
+    theme is that when the menu item is disabled, the icon is dimmed but still
+    visible.  Later I will use this by disabling the menu item when the shared
+    feature is unusable.
     * Build your code and run your code.  After you click on the 
-      increment counter now, you should see a share icon on the tool bar.
-      Click on the icon and you should see a toast message that says share.
-      Assuming this works, you are ready to add the intent code.
+    increment counter now, you should see a share icon on the tool bar.
+    Click on the icon and you should see a toast message that says share.
+    Assuming this works, you are ready to add the intent code.
+    
+        * Creating the shared intent:  
+        We want to send an message to applications that will respond to "text/plain"
+        which will mean things like email, social apps, etc.  This involves building
+        an intent and using startActivity to invoke the other application.
+        ![NavEditor Image](snapshots/GetShareIntent.png)  
+        This code builds the intent for the text passed in and then attempts to resolve
+        it.  If resolution fails (i.e. no application responds to this mime type) we
+        set the returned intent to null.
+        * enable/disable menu item in onCreateOptionsMenu  
+        ![NavEditor Image](snapshots/OnCreateOptionsMenu.png)  
+        The code in the onCreateOptionsMenu method tests to see if an app supports
+        the mime type by trying to get an intent with an empty string.  If the
+        resultant intent is a null we disable the menu item.  With the menu item
+        disabled, the user sees a greyed-out icon and can't "share" his counter info.          
+        The code with 'isEnabled' was confusing to me on first encountering it.  It's 
+        the same   
+        *shareItem.setEnabled(getShareIntent("") != null)*  
+        and is refered to as "property access syntax" in kotlin.
+    
+        * Sending the intent:  
+        ![NavEditor Image](snapshots/onOptionsItemSelected.png)  
+        The code above gets an intent and if it's not null broadcasts it using 
+        the startActivity method.  
+        
+    * That's it, you just 'shared' your counter info.
+    
+
     
     
     
